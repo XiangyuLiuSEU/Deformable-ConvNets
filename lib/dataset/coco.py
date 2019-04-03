@@ -117,16 +117,20 @@ class coco(IMDB):
         image_ids = self.coco.getImgIds()
         return image_ids
 
+    # def image_path_from_index(self, index):
+    #     """ example: images / train2014 / COCO_train2014_000000119993.jpg """
+    #     filename = 'COCO_%s_%012d.jpg' % (self.data_name, index)
+    #     image_path = os.path.join(self.data_path, 'images', self.data_name, filename)
+    #     assert os.path.exists(image_path), 'Path does not exist: {}'.format(image_path)
+    #     return image_path
+
     def image_path_from_index(self, index):
-        """ example: images / train2014 / COCO_train2014_000000119993.jpg """
-        filename = 'COCO_%s_%012d.jpg' % (self.data_name, index)
+        filename = self.coco.loadImgs(index)[0]['file_name']
         image_path = os.path.join(self.data_path, 'images', self.data_name, filename)
         assert os.path.exists(image_path), 'Path does not exist: {}'.format(image_path)
         return image_path
 
     def image_path_from_im_name(self, im_name):
-        
-        #filename = '%s.jpg' % (index)
         image_path = os.path.join(self.data_path, 'images', self.data_name, im_name)
         assert os.path.exists(image_path), 'Path does not exist: {}'.format(image_path)
         return image_path
@@ -191,8 +195,8 @@ class coco(IMDB):
             else:
                 overlaps[ix, cls] = 1.0
 
-        roi_rec = {#'image': self.image_path_from_index(index),
-                   'image': self.image_path_from_im_name(im_ann['file_name']),
+        roi_rec = {'image': self.image_path_from_index(index),
+                   #'image': self.image_path_from_im_name(im_ann['file_name']),
                    'height': height,
                    'width': width,
                    'boxes': boxes,
